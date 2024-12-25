@@ -34,25 +34,78 @@
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
 
-        const player = {
-            x: 50,
-            y: 50,
-            size: 20,
-            image: 'airplane.png',
-            speed: 4,
-        };
+       const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
 
-        const items = [
-            { x: 100, y: 100, image: 'C.png', collected: false },
-            { x: 200, y: 150, image: 'H.png', collected: false },
-            { x: 300, y: 200, image: 'R.png', collected: false },
-            { x: 400, y: 250, image: 'I.png', collected: false },
-            { x: 150, y: 300, image: 'S.png', collected: false },
-            { x: 250, y: 350, image: 'T.png', collected: false },
-            { x: 350, y: 50, image: 'M.png', collected: false },
-            { x: 450, y: 100, image: 'A.png', collected: false },
-            { x: 500, y: 200, image: 'S.png', collected: false },
-        ];
+// Preloaded images
+const images = {
+    player: new Image(),
+    C: new Image(),
+    H: new Image(),
+    R: new Image(),
+    I: new Image(),
+    S: new Image(),
+    T: new Image(),
+    M: new Image(),
+    A: new Image(),
+    S2: new Image(),
+};
+
+// Load images
+images.player.src = 'player.png';
+images.C.src = 'C.png';
+images.H.src = 'H.png';
+images.R.src = 'R.png';
+images.I.src = 'I.png';
+images.S.src = 'S.png';
+images.T.src = 'T.png';
+images.M.src = 'M.png';
+images.A.src = 'A.png';
+images.S2.src = 'S2.png';
+
+// Preload complete check
+const allImagesLoaded = new Promise((resolve) => {
+    let loaded = 0;
+    const total = Object.keys(images).length;
+    Object.values(images).forEach((img) => {
+        img.onload = () => {
+            loaded += 1;
+            if (loaded === total) resolve();
+        };
+    });
+});
+
+const player = {
+    x: 50,
+    y: 50,
+    size: 20,
+    image: images.player,
+    speed: 4,
+};
+
+const items = [
+    { x: 100, y: 100, image: images.C, collected: false },
+    { x: 200, y: 150, image: images.H, collected: false },
+    { x: 300, y: 200, image: images.R, collected: false },
+    { x: 400, y: 250, image: images.I, collected: false },
+    { x: 150, y: 300, image: images.S, collected: false },
+    { x: 250, y: 350, image: images.T, collected: false },
+    { x: 350, y: 50, image: images.M, collected: false },
+    { x: 450, y: 100, image: images.A, collected: false },
+    { x: 500, y: 200, image: images.S2, collected: false },
+];
+
+function drawPlayer() {
+    ctx.drawImage(player.image, player.x, player.y, player.size, player.size);
+}
+
+function drawItems() {
+    items.forEach(item => {
+        if (!item.collected) {
+            ctx.drawImage(item.image, item.x - 10, item.y - 10, 20, 20);
+        }
+    });
+}
 
         const keys = {
             ArrowUp: false,
