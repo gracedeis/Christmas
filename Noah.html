@@ -1,0 +1,132 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NATO Alphabet Puzzle Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f8ff;
+        }
+        canvas {
+            display: block;
+            margin: 20px auto;
+            background: #ffffff;
+            border: 2px solid #2e8b57;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        #message {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #2e8b57;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas" width="600" height="400"></canvas>
+    <div id="message"></div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        const player = {
+            x: 50,
+            y: 50,
+            size: 20,
+            image: 'airplane.png',
+            speed: 4,
+        };
+
+        const items = [
+            { x: 100, y: 100, image: 'C.png', collected: false },
+            { x: 200, y: 150, image: 'H.png', collected: false },
+            { x: 300, y: 200, image: 'R.png', collected: false },
+            { x: 400, y: 250, image: 'I.png', collected: false },
+            { x: 150, y: 300, image: 'S.png', collected: false },
+            { x: 250, y: 350, image: 'T.png', collected: false },
+            { x: 350, y: 50, image: 'M.png', collected: false },
+            { x: 450, y: 100, image: 'A.png', collected: false },
+            { x: 500, y: 200, image: 'S.png', collected: false },
+        ];
+
+        const keys = {
+            ArrowUp: false,
+            ArrowDown: false,
+            ArrowLeft: false,
+            ArrowRight: false,
+        };
+
+        let collectedItems = '';
+
+        function drawPlayer() {
+            const img = new Image();
+            img.src = player.image;
+            img.onload = () => {
+                ctx.drawImage(img, player.x, player.y, player.size, player.size);
+            };
+        }
+
+        function drawItems() {
+            items.forEach(item => {
+                if (!item.collected) {
+                    const img = new Image();
+                    img.src = item.image;
+                    img.onload = () => {
+                        ctx.drawImage(img, item.x - 10, item.y - 10, 20, 20);
+                    };
+                }
+            });
+        }
+
+        function updatePlayerPosition() {
+            if (keys.ArrowUp && player.y > 0) player.y -= player.speed;
+            if (keys.ArrowDown && player.y + player.size < canvas.height) player.y += player.speed;
+            if (keys.ArrowLeft && player.x > 0) player.x -= player.speed;
+            if (keys.ArrowRight && player.x + player.size < canvas.width) player.x += player.speed;
+        }
+
+        function checkCollision() {
+            items.forEach(item => {
+                if (!item.collected &&
+                    player.x < item.x + 10 && player.x + player.size > item.x - 10 &&
+                    player.y < item.y + 10 && player.y + player.size > item.y - 10) {
+                    item.collected = true;
+                    collectedItems += item.image.split('.')[0];
+                }
+            });
+
+            if (collectedItems === 'CHRISTMAS') {
+                window.location.href = 'merry_christmas.html';
+            }
+        }
+
+        function gameLoop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawPlayer();
+            drawItems();
+            updatePlayerPosition();
+            checkCollision();
+            requestAnimationFrame(gameLoop);
+        }
+
+        window.addEventListener('keydown', (e) => {
+            if (keys.hasOwnProperty(e.key)) {
+                keys[e.key] = true;
+            }
+        });
+
+        window.addEventListener('keyup', (e) => {
+            if (keys.hasOwnProperty(e.key)) {
+                keys[e.key] = false;
+            }
+        });
+
+        gameLoop();
+    </script>
+</body>
+</html>
