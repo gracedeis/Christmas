@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -28,7 +27,6 @@
     </style>
 </head>
 <body>
-    test
     <canvas id="gameCanvas" width="600" height="400"></canvas>
     <div id="message"></div>
 
@@ -63,10 +61,18 @@
             ArrowRight: false,
         };
 
+        const correctSequence = '🇨🇭🇷🇮🇸🇹🇲🇦🇸';
         let collectedItems = '';
 
+        function resetGame() {
+            collectedItems = '';
+            items.forEach(item => item.collected = false);
+            player.x = 50;
+            player.y = 50;
+            document.getElementById('message').textContent = '';
+        }
+
         function drawPlayer() {
-            ctx.fillStyle = 'black';
             ctx.font = `${player.size}px Arial`;
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
@@ -76,7 +82,6 @@
         function drawItems() {
             items.forEach(item => {
                 if (!item.collected) {
-                    ctx.fillStyle = 'black';
                     ctx.font = '30px Arial';
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
@@ -99,12 +104,15 @@
                     player.y < item.y + 20 && player.y > item.y - 20) {
                     item.collected = true;
                     collectedItems += item.emoji;
+
+                    if (!correctSequence.startsWith(collectedItems)) {
+                        document.getElementById('message').textContent = 'That was incorrect. Try again';
+                        resetGame();
+                    } else if (collectedItems === correctSequence) {
+                        window.location.href = 'merry_christmas.html';
+                    }
                 }
             });
-
-            if (collectedItems === '🇨🇭🇷🇮🇸🇹🇲🇦🇸') {
-                window.location.href = 'merry_christmas.html';
-            }
         }
 
         function gameLoop() {
@@ -132,4 +140,5 @@
     </script>
 </body>
 </html>
+
 
