@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -27,6 +28,7 @@
     </style>
 </head>
 <body>
+    test
     <canvas id="gameCanvas" width="600" height="400"></canvas>
     <div id="message"></div>
 
@@ -64,6 +66,7 @@
         let collectedItems = '';
 
         function drawPlayer() {
+            ctx.fillStyle = 'black';
             ctx.font = `${player.size}px Arial`;
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
@@ -73,6 +76,7 @@
         function drawItems() {
             items.forEach(item => {
                 if (!item.collected) {
+                    ctx.fillStyle = 'black';
                     ctx.font = '30px Arial';
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
@@ -128,3 +132,4 @@
     </script>
 </body>
 </html>
+
